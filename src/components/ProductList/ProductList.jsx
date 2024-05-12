@@ -36,8 +36,22 @@ const ProductList = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Response received:', data);
+      // Добавьте здесь код для обработки успешного ответа
+    })
+    .catch(error => {
+      console.error('Error during fetch:', error);
+      // Добавьте здесь код для обработки ошибки
     });
-  }, [addedItems])
+  }, [addedItems, queryId])
 
   useEffect(() => {
     tg.onEvent('mainButtonClicked', onSendData)
@@ -74,6 +88,7 @@ const ProductList = () => {
     <div className={"list"}>
       {products.map(item => (
         <ProductItem 
+          key={item.id}
           product={item}
           onAdd={onAdd}
           className={'item'}
